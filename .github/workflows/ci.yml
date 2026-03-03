@@ -28,3 +28,18 @@ jobs:
 
       - name: Build with Gradle (tests included)
         run: ./gradlew build
+
+      - name: Archive JUnit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-test-results
+          path: build/test-results/test
+
+      - name: Archive JaCoCo coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: |
+            build/reports/jacoco/test
