@@ -18,7 +18,7 @@ jobs:
     secrets: inherit
 
   publish:
-    needs: build
+    needs: call-gradle-build-workflow
     runs-on: ubuntu-latest
     steps:
       - name: Placeholder for Docker/MCP registry publishing

@@ -15,7 +15,7 @@ jobs:
     secrets: inherit
 
   release:
-    needs: build
+    needs: call-gradle-build-workflow
     runs-on: ubuntu-latest
     permissions:
       contents: write
