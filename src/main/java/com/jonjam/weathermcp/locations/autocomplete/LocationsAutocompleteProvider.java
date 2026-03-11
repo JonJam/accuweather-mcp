@@ -17,6 +17,7 @@ public class LocationsAutocompleteProvider {
 
   private final LocationsAutocompleteGateway gateway;
 
+  // TODO verify if MCP arg works
   @McpComplete(prompt = "location-search")
   public CompleteResult completeLocation(
       @McpArg(

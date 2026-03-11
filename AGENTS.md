@@ -70,6 +70,10 @@ Add rules below this line:
 - **Group tests by method**: Use JUnit 5 `@Nested` classes with `@DisplayName` to group test cases for a particular method; name the nested class after the method under test (e.g. `class AutocompleteForCitiesAndPointsOfInterest`).
 - **Arrange, Act, Assert**: Structure each test method with `// Arrange`, `// Act`, and `// Assert` comments to separate setup, invocation, and verification.
 
+### Wiremock
+- **WireMock usage**: When using WireMock in tests, prefer calling `stubFor` and other stubbing methods on the injected `WireMockServer` instance (e.g. a field annotated with `@InjectWireMock`) rather than using the static `WireMock.stubFor(...)` API, so that stubs are scoped to the configured server instance.
+- **WireMock response bodies**: Prefer using `.withBodyFile(...)` and JSON files under `src/test/resources/__files/` for stubbed HTTP responses instead of inline string bodies, so that payloads stay reusable and easy to maintain.
+
 ---
 
 ### Skills

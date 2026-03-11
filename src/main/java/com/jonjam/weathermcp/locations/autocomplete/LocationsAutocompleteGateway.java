@@ -15,7 +15,7 @@ public class LocationsAutocompleteGateway {
   public List<String> autocompleteForCitiesAndPointsOfInterest(
       final String partialName, final Locale language) {
 
-    // TODO error handling
+    // TODO add error handling
     return client
         .autocompleteForCitiesAndPointsOfInterest(partialName, language.toLanguageTag())
         .stream()
