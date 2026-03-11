@@ -6,19 +6,19 @@ import org.springframework.stereotype.Component;
 
 // TODO Review
 @Component
-public class CurrentConditionsPromptProvider {
+public class CurrentConditionsProvider {
 
   @McpPrompt(
       name = "current-conditions",
       description = "Ask for the current weather conditions in a location.")
-  public String currentConditions(
+  public String currentConditionsPrompt(
       @McpArg(name = "location", description = "City or point of interest", required = true)
-          String location,
-      @McpArg(name = "language", description = "AccuWeather language code", required = false)
-          String language) {
+          final String location,
+      @McpArg(name = "language", description = "AccuWeather language code") final String language) {
 
-    StringBuilder text = new StringBuilder("Provide the current weather conditions for ");
+    final StringBuilder text = new StringBuilder("Provide the current weather conditions for ");
     text.append(location);
+
     if (language != null && !language.isBlank()) {
       text.append(" using language code ").append(language);
     }
@@ -27,4 +27,3 @@ public class CurrentConditionsPromptProvider {
     return text.toString();
   }
 }
-

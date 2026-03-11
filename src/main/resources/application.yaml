@@ -12,6 +12,6 @@ spring:
     serviceclient:
       accuweather:
         base-url: https://dataservice.accuweather.com
-        api-key: "CHANGE_ME"
-
-        # TODO sort out default headers of GZIP and authentication
+        default-header:
+          Accept-Encoding: gzip,deflate
+          Authorization: Bearer ${ACCUWEATHER_API_KEY}

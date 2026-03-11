@@ -15,6 +15,10 @@ This file defines how agents should work in this repository and where to find re
 
 Add rules below this line:
 
+### Java
+
+- **Use final**: Prefer prefixing parameters and local variables with `final` where they are not reassigned, to make immutability explicit and avoid accidental reassignment.
+
 ### Spring Boot
 
 - **Dependency versions**: When using Spring Boot with the `io.spring.dependency-management` plugin, do not specify versions on individual dependencies in the `dependencies {}` block. Rely on BOMs (for example, `spring-boot-dependencies` and technology-specific BOMs like `spring-ai-bom`) to control versions centrally, as recommended in the Spring Boot dependency management documentation.
@@ -58,7 +62,13 @@ Add rules below this line:
   Lombok generates a final class with private final fields, getters, and sensible `equals`, `hashCode`, and `toString` implementations. The constructor is private so callers must use `WeatherSummaryDto.builder()...build()`.
 
 ### Tests
-- **Use hamcrest assertions**
+- **Use Hamcrest assertions**: Prefer Hamcrest for test assertions so failure messages and intent stay clear and consistent.
+  - Use `org.hamcrest.MatcherAssert.assertThat(actual, matcher)` (static import: `assertThat` from `org.hamcrest.MatcherAssert`).
+  - Use matchers from `org.hamcrest.Matchers` (e.g. `is()`, `equalTo()`, `not()`, `nullValue()`, `hasItems()`, `contains()`, `hasSize()`, `allOf()`, `anyOf()`) rather than raw equality or AssertJ in the same tests.
+  - Keep a single assertion style per test class: use Hamcrest for all assertions in that class, and avoid mixing with AssertJ or JUnit `assertEquals`-style calls.
+- **Test fields and variables**: Qualify test fields and locals with explicit scope (e.g. `private` for class-level mocks and the class under test).
+- **Group tests by method**: Use JUnit 5 `@Nested` classes with `@DisplayName` to group test cases for a particular method; name the nested class after the method under test (e.g. `class AutocompleteForCitiesAndPointsOfInterest`).
+- **Arrange, Act, Assert**: Structure each test method with `// Arrange`, `// Act`, and `// Assert` comments to separate setup, invocation, and verification.
 
 ---
 

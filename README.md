@@ -1,5 +1,11 @@
 # weather-mcp
 
+## Setup
+- Define a `application-local.yaml` in `src/main/resources/application.yaml`
+
+## Run
+- Run with `SPRING_PROFILES_ACTIVE=local ./gradlew bootRun`
+
 ## Code style and static analysis
 
 ### Spotless
