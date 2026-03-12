@@ -2,6 +2,7 @@ package com.jonjam.weathermcp.currentconditions;
 
 import com.jonjam.weathermcp.LocaleUtils;
 import com.jonjam.weathermcp.Prompts;
+import io.modelcontextprotocol.spec.McpSchema.CallToolResult;
 import java.util.Locale;
 import org.springaicommunity.mcp.annotation.McpArg;
 import org.springaicommunity.mcp.annotation.McpMeta;
@@ -47,11 +48,13 @@ public class CurrentConditionsProvider {
               destructiveHint = false,
               idempotentHint = true,
               openWorldHint = true))
-  public String currentConditionsTool(
+  public CallToolResult currentConditionsTool(
       @McpToolParam(description = "City or point of interest", required = true)
           final String location) {
 
     // TODO validate location parameter
+    // See
+    // [https://modelcontextprotocol.io/specification/2025-11-25/server/tools#error-handling](https://modelcontextprotocol.io/specification/2025-11-25/server/tools#error-handling)
 
     // TODO call gateway to lookup location key
 
@@ -59,6 +62,8 @@ public class CurrentConditionsProvider {
 
     // TODO return current conditions
 
-    return "Current conditions for " + location + " are not yet implemented.";
+    return CallToolResult.builder()
+        .addTextContent("Current conditions for " + location + " are not yet implemented.")
+        .build();
   }
 }

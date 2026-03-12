@@ -1,4 +1,4 @@
-package com.jonjam.weathermcp.locations.autocomplete;
+package com.jonjam.weathermcp.locations.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
