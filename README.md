@@ -3,6 +3,10 @@
 ## Setup
 - Define a `application-local.yaml` in `src/main/resources/application.yaml` with the following content:
 ```YAML
+logging:
+  console:
+    enabled: true
+
 spring:
   http:
     serviceclient:
@@ -15,14 +19,39 @@ spring:
 - Run with `SPRING_PROFILES_ACTIVE=local ./gradlew bootRun`
 
 ## Testing
+### MCP Inspector
 - To test with MCP Inspector, use the following command:
 
 ```bash
-SPRING_PROFILES_ACTIVE=local \
+ACCUWEATHER_API_KEY=API_KEY \
 npx @modelcontextprotocol/inspector \
   -e 'JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005' \
-  java -jar /Users/jonjam/dev/weather-mcp/build/libs/weathermcp-0.0.1-snapshot.jar
+  java -jar ABSOLUTE_PATH_TO_REPO/build/libs/weathermcp-0.0.1-snapshot.jar
 ```
+s
+This was sourced from this [blog](https://medium.com/@tsteidle/creating-an-mcp-server-with-spring-boot-setup-debugging-and-unit-testing-8edbac9da5a6)
+
+### Claude Desktop
+
+- Add this to `~/Library/Application Support/Claude/claude_desktop_config.json`
+```json
+{
+  "mcpServers": {
+    "weather-mcp": {
+      "command": "PATH_TO_JAVA",
+      "args": ["-jar", "ABSOLUTE_PATH_TO_REPO/build/libs/weathermcp-0.0.1-snapshot.jar"],
+      "env": {
+        "ACCUWEATHER_API_KEY": "API_KEY",
+        "JAVA_TOOL_OPTIONS": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      }
+    }
+  }
+}
+```
+- If you are using SDKMAN, `command` should be `~/.sdkman/candidates/java/current/bin/java`
+- After saving the config file, fully quit and restart Claude Desktop.
+
+This was sourced from the [MCP docs](https://modelcontextprotocol.io/docs/develop/build-server#testing-your-server-with-claude-for-desktop-3).
 
 ## Code style and static analysis
 
