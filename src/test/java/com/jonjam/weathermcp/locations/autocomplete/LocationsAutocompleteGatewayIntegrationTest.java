@@ -8,9 +8,9 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.jonjam.weathermcp.locations.common.LocationSuggestionDto;
 import java.util.List;
 import java.util.Locale;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,6 @@ import org.wiremock.spring.ConfigureWireMock;
 import org.wiremock.spring.EnableWireMock;
 import org.wiremock.spring.InjectWireMock;
 
-// TODO Refactor to demo happy path and error handling
 @ActiveProfiles("test")
 @SpringBootTest
 @EnableWireMock(
@@ -32,17 +31,6 @@ class LocationsAutocompleteGatewayIntegrationTest {
 
   @Autowired private LocationsAutocompleteGateway gateway;
 
-  @BeforeEach
-  void stubAccuWeatherAutocomplete() {
-    wireMock.stubFor(
-        get(urlPathEqualTo("/locations/v1/autocomplete"))
-            .willReturn(
-                aResponse()
-                    .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
-                    .withBodyFile("locations-autocomplete-san.json")));
-  }
-
   @Nested
   @DisplayName("autocompleteForCitiesAndPointsOfInterest")
   class AutocompleteForCitiesAndPointsOfInterest {
@@ -51,6 +39,14 @@ class LocationsAutocompleteGatewayIntegrationTest {
     @DisplayName("calls AccuWeather over HttpServiceClient")
     void callsAccuWeatherOverHttpServiceClient() {
       // Arrange
+      wireMock.stubFor(
+          get(urlPathEqualTo("/locations/v1/autocomplete"))
+              .willReturn(
+                  aResponse()
+                      .withStatus(200)
+                      .withHeader("Content-Type", "application/json")
+                      .withBodyFile("locations-autocomplete-san.json")));
+
       final Locale locale = Locale.forLanguageTag("en-us");
 
       // Act

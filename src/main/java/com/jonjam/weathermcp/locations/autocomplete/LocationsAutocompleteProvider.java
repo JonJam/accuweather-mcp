@@ -2,6 +2,7 @@ package com.jonjam.weathermcp.locations.autocomplete;
 
 import com.jonjam.weathermcp.LocaleUtils;
 import com.jonjam.weathermcp.Prompts;
+import com.jonjam.weathermcp.locations.common.LocationSuggestionDto;
 import io.modelcontextprotocol.spec.McpSchema.CompleteResult;
 import java.util.Collections;
 import java.util.List;
