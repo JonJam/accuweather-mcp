@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import io.modelcontextprotocol.spec.McpSchema.CompleteResult;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +57,80 @@ class LocationsAutocompleteProviderTest {
 
       assertThat(completion.hasMore(), is(false));
       assertThat(completion.values(), is(List.of("San Francisco, United States")));
+    }
+
+    @Test
+    @DisplayName("returns empty completion when partialLocation is null")
+    void returnsEmptyCompletionWhenPartialLocationIsNull() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      metadata.put("locale", Locale.US.toLanguageTag());
+      final McpMeta meta = new McpMeta(metadata);
+
+      // Act
+      final CompleteResult result = provider.completeLocation(null, meta);
+
+      // Assert
+      final CompleteResult.CompleteCompletion completion = result.completion();
+
+      assertThat(completion.hasMore(), is(false));
+      assertThat(completion.values(), is(Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("returns empty completion when partialLocation is empty")
+    void returnsEmptyCompletionWhenPartialLocationIsEmpty() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      metadata.put("locale", Locale.US.toLanguageTag());
+      final McpMeta meta = new McpMeta(metadata);
+
+      // Act
+      final CompleteResult result = provider.completeLocation("", meta);
+
+      // Assert
+      final CompleteResult.CompleteCompletion completion = result.completion();
+
+      assertThat(completion.hasMore(), is(false));
+      assertThat(completion.values(), is(Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("returns empty completion when partialLocation is shorter than minimum length")
+    void returnsEmptyCompletionWhenPartialLocationIsShorterThanMinimumLength() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      metadata.put("locale", Locale.US.toLanguageTag());
+      final McpMeta meta = new McpMeta(metadata);
+
+      // Act
+      final CompleteResult result = provider.completeLocation("ab", meta);
+
+      // Assert
+      final CompleteResult.CompleteCompletion completion = result.completion();
+
+      assertThat(completion.hasMore(), is(false));
+      assertThat(completion.values(), is(Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("returns empty completion when partialLocation is longer than maximum length")
+    void returnsEmptyCompletionWhenPartialLocationIsLongerThanMaximumLength() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      metadata.put("locale", Locale.US.toLanguageTag());
+      final McpMeta meta = new McpMeta(metadata);
+
+      final String overMaxLength = "a".repeat(101);
+
+      // Act
+      final CompleteResult result = provider.completeLocation(overMaxLength, meta);
+
+      // Assert
+      final CompleteResult.CompleteCompletion completion = result.completion();
+
+      assertThat(completion.hasMore(), is(false));
+      assertThat(completion.values(), is(Collections.emptyList()));
     }
   }
 }
