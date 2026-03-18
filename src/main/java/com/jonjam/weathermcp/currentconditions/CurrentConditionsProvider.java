@@ -12,9 +12,9 @@ import org.springaicommunity.mcp.annotation.McpMeta;
 import org.springaicommunity.mcp.annotation.McpPrompt;
 import org.springaicommunity.mcp.annotation.McpTool;
 import org.springaicommunity.mcp.annotation.McpToolParam;
+import org.springaicommunity.mcp.context.McpSyncRequestContext;
 import org.springframework.stereotype.Component;
 
-// TODO Review and improve this when built out tool
 @Component
 @RequiredArgsConstructor
 public class CurrentConditionsProvider {
@@ -23,7 +23,6 @@ public class CurrentConditionsProvider {
   private final CurrentConditionsGateway currentConditionsGateway;
   private final CurrentConditionsToolResultMapper currentConditionsToolResultMapper;
 
-  // TODO tests
   @McpPrompt(
       name = Prompts.CURRENT_CONDITIONS_PROMPT,
       description = "Ask for the current weather conditions in a location.")
@@ -45,7 +44,6 @@ public class CurrentConditionsProvider {
     return prompt.toString();
   }
 
-  // TODO tests
   @McpTool(
       name = "current-conditions",
       description = "Get the current weather conditions for a location.",
@@ -59,7 +57,10 @@ public class CurrentConditionsProvider {
   public CallToolResult currentConditionsTool(
       @McpToolParam(description = "City or point of interest", required = true)
           final String location,
+      final McpSyncRequestContext context,
       final McpMeta meta) {
+
+    context.info(String.format("Current conditions requested for raw location: %s", location));
 
     final var normalizedLocationOptional =
         LocationValidationUtils.normalizeAndValidateLocation(location);
@@ -74,7 +75,14 @@ public class CurrentConditionsProvider {
 
     final String normalizedLocation = normalizedLocationOptional.orElseThrow();
 
+    context.info(
+        String.format(
+            "Current conditions requested for normalized location: %s", normalizedLocation));
+
     final Locale resolvedLanguage = LocaleUtils.resolveLocale(meta);
+
+    context.info(
+        String.format("Requesting in resolved lanaguage: %s", resolvedLanguage.toLanguageTag()));
 
     final var locationSuggestionOptional =
         locationsTextSearchGateway.search(normalizedLocation, resolvedLanguage);
@@ -89,6 +97,13 @@ public class CurrentConditionsProvider {
 
     final var locationSuggestion = locationSuggestionOptional.orElseThrow();
 
+    context.info(
+        String.format(
+            "Looking up current conditions for location: id=%s, name=%s, country=%s",
+            locationSuggestion.getId(),
+            locationSuggestion.getLocalizedName(),
+            locationSuggestion.getCountryLocalizedName()));
+
     final var currentConditionsOptional =
         currentConditionsGateway.getCurrentConditions(locationSuggestion.getId(), resolvedLanguage);
 
@@ -102,12 +117,34 @@ public class CurrentConditionsProvider {
 
     final var currentConditions = currentConditionsOptional.orElseThrow();
 
+    context.info(
+        String.format(
+            "Current conditions found for location=%s; mapping tool result.",
+            locationSuggestion.getId()));
+
     final CurrentConditionsToolResult toolResult =
         currentConditionsToolResultMapper.toToolResult(
             locationSuggestion.getLocalizedName(),
             locationSuggestion.getCountryLocalizedName(),
             currentConditions);
 
-    return CallToolResult.builder().structuredContent(toolResult).build();
+    context.info(
+        String.format(
+            "Returning current conditions tool result for: %s, %s",
+            locationSuggestion.getLocalizedName(), locationSuggestion.getCountryLocalizedName()));
+
+    final String formattedToolResult =
+        String.format(
+            "Location: %s, Country: %s, Temperature: %d°C (%d°F), Conditions: %s",
+            toolResult.getLocationLocalizedName(),
+            toolResult.getCountryLocalizedName(),
+            toolResult.getTemperatureMetric(),
+            toolResult.getTemperatureImperial(),
+            toolResult.getWeatherText());
+
+    return CallToolResult.builder()
+        .addTextContent(formattedToolResult)
+        .structuredContent(toolResult)
+        .build();
   }
 }

@@ -32,10 +32,9 @@ npx @modelcontextprotocol/inspector   -e 'JAVA_TOOL_OPTIONS=-agentlib:jdwp=trans
 
 This was sourced from this [blog.](https://medium.com/@tsteidle/creating-an-mcp-server-with-spring-boot-setup-debugging-and-unit-testing-8edbac9da5a6)
 
+### AI chat (Claude, Cursor)
 
-### Claude Desktop
-
-1. Add this configuration to `~/Library/Application Support/Claude/claude_desktop_config.json`
+1. Add this configuration to the MCP settings:
 
 ```json
 {
@@ -53,9 +52,13 @@ This was sourced from this [blog.](https://medium.com/@tsteidle/creating-an-mcp-
 
 If you are using SDKMAN, `command` should be `~/.sdkman/candidates/java/current/bin/java`
 
-1. After saving the config file, fully quit and restart Claude Desktop.
-
 This was sourced from the [MCP docs](https://modelcontextprotocol.io/docs/develop/build-server#testing-your-server-with-claude-for-desktop-3).
+
+Example user prompt:
+
+```
+Use the weather-mcp to look up the current weather in Manchester, UK.
+```
 
 ## Code style and static analysis
 

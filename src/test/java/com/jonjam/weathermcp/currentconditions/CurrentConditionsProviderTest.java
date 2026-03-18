@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springaicommunity.mcp.annotation.McpMeta;
+import org.springaicommunity.mcp.context.McpSyncRequestContext;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CurrentConditionsProvider")
@@ -31,6 +32,8 @@ class CurrentConditionsProviderTest {
       locationsTextSearchGateway;
 
   @Mock private CurrentConditionsToolResultMapper currentConditionsToolResultMapper;
+
+  @Mock private McpSyncRequestContext context;
 
   @InjectMocks private CurrentConditionsProvider provider;
 
@@ -47,7 +50,7 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("", meta);
+      final CallToolResult result = provider.currentConditionsTool("", context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -68,7 +71,7 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("   ", meta);
+      final CallToolResult result = provider.currentConditionsTool("   ", context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -89,7 +92,7 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("ab", meta);
+      final CallToolResult result = provider.currentConditionsTool("ab", context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -112,7 +115,7 @@ class CurrentConditionsProviderTest {
       final String overMaxLength = "a".repeat(101);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool(overMaxLength, meta);
+      final CallToolResult result = provider.currentConditionsTool(overMaxLength, context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -135,7 +138,7 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("Nowhere", meta);
+      final CallToolResult result = provider.currentConditionsTool("Nowhere", context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -166,7 +169,7 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("Somewhere", meta);
+      final CallToolResult result = provider.currentConditionsTool("Somewhere", context, meta);
 
       // Assert
       assertThat(result.isError(), is(true));
@@ -222,11 +225,17 @@ class CurrentConditionsProviderTest {
       final McpMeta meta = new McpMeta(metadata);
 
       // Act
-      final CallToolResult result = provider.currentConditionsTool("San Francisco", meta);
+      final CallToolResult result = provider.currentConditionsTool("San Francisco", context, meta);
 
       // Assert
       assertThat(result.isError(), is(false));
       assertThat(result.structuredContent(), is(toolResult));
+
+      final TextContent content = (TextContent) result.content().getFirst();
+      assertThat(
+          content.text(),
+          is(
+              "Location: San Francisco, Country: United States, Temperature: 20°C (68°F), Conditions: Sunny"));
     }
   }
 }
