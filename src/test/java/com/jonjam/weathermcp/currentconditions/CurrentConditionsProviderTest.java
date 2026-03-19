@@ -2,6 +2,7 @@ package com.jonjam.weathermcp.currentconditions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
@@ -236,6 +237,48 @@ class CurrentConditionsProviderTest {
           content.text(),
           is(
               "Location: San Francisco, Country: United States, Temperature: 20°C (68°F), Conditions: Sunny"));
+    }
+  }
+
+  @Nested
+  @DisplayName("currentConditionsPrompt")
+  class CurrentConditionsPrompt {
+
+    @Test
+    @DisplayName("includes location and language tag from meta when locale is valid")
+    void includesLocationAndResolvedLanguageFromMeta() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      metadata.put("locale", "en-GB");
+      final McpMeta meta = new McpMeta(metadata);
+
+      // Act
+      final String prompt = provider.currentConditionsPrompt("London", meta);
+
+      // Assert
+      assertThat(
+          prompt,
+          is(
+              equalTo(
+                  "Provide the current weather conditions for London using language code en-GB.")));
+    }
+
+    @Test
+    @DisplayName("uses default language tag when meta has no locale")
+    void usesDefaultLanguageWhenMetaHasNoLocale() {
+      // Arrange
+      final var metadata = new HashMap<String, Object>();
+      final McpMeta meta = new McpMeta(metadata);
+
+      // Act
+      final String prompt = provider.currentConditionsPrompt("Paris", meta);
+
+      // Assert
+      assertThat(
+          prompt,
+          is(
+              equalTo(
+                  "Provide the current weather conditions for Paris using language code en-US.")));
     }
   }
 }
