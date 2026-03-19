@@ -28,24 +28,17 @@ public class CurrentConditionsProvider {
       description = "Ask for the current weather conditions in a location.")
   public String currentConditionsPrompt(
       @McpArg(name = "location", description = "City or point of interest", required = true)
-          final String location,
-      final McpMeta meta) {
-
-    final Locale resolvedLanguage = LocaleUtils.resolveLocale(meta);
+          final String location) {
 
     final StringBuilder prompt = new StringBuilder("Provide the current weather conditions for ");
 
-    prompt
-        .append(location)
-        .append(" using language code ")
-        .append(resolvedLanguage.toLanguageTag())
-        .append(".");
+    prompt.append(location).append(".");
 
     return prompt.toString();
   }
 
   @McpTool(
-      name = "current-conditions",
+      name = Prompts.CURRENT_CONDITIONS_PROMPT,
       description = "Get the current weather conditions for a location.",
       annotations =
           @McpTool.McpAnnotations(
