@@ -10,8 +10,7 @@ import lombok.Value;
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonDeserialize(
-    builder = AccuWeatherDailyForecastDto.AccuWeatherDailyForecastDtoBuilder.class)
+@JsonDeserialize(builder = AccuWeatherDailyForecastDto.AccuWeatherDailyForecastDtoBuilder.class)
 public class AccuWeatherDailyForecastDto {
 
   @JsonProperty("Date")

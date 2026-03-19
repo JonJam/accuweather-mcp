@@ -11,8 +11,7 @@ import lombok.Value;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonDeserialize(
-    builder =
-        AccuWeatherDailyForecastHeadlineDto.AccuWeatherDailyForecastHeadlineDtoBuilder.class)
+    builder = AccuWeatherDailyForecastHeadlineDto.AccuWeatherDailyForecastHeadlineDtoBuilder.class)
 public class AccuWeatherDailyForecastHeadlineDto {
 
   @JsonProperty("EffectiveDate")
