@@ -18,7 +18,6 @@ public class HourlyForecastToolResultMapper {
         .locationLocalizedName(locationLocalizedName)
         .countryLocalizedName(countryLocalizedName)
         .hours(hours)
-        .detailLink(summary.getDetailLink())
         .build();
   }
 
@@ -29,6 +28,7 @@ public class HourlyForecastToolResultMapper {
         .iconPhrase(hour.getIconPhrase())
         .temperatureValue(hour.getTemperatureValue())
         .temperatureUnit(hour.getTemperatureUnit())
+        .link(hour.getLink())
         .build();
   }
 }

@@ -147,7 +147,6 @@ class HourlyForecastProviderTest {
 
       final HourlyForecastSummaryDto summary =
           HourlyForecastSummaryDto.builder()
-              .detailLink("https://example.com/hourly")
               .hours(
                   List.of(
                       HourlyForecastHourSummaryDto.builder()
@@ -155,6 +154,7 @@ class HourlyForecastProviderTest {
                           .iconPhrase("Partly cloudy")
                           .temperatureValue(18.5f)
                           .temperatureUnit("C")
+                          .link("https://example.com/hourly")
                           .build()))
               .build();
 
@@ -162,7 +162,6 @@ class HourlyForecastProviderTest {
           HourlyForecastToolResult.builder()
               .locationLocalizedName("San Francisco")
               .countryLocalizedName("United States")
-              .detailLink(summary.getDetailLink())
               .hours(
                   List.of(
                       HourlyForecastHourToolResult.builder()
@@ -170,6 +169,7 @@ class HourlyForecastProviderTest {
                           .iconPhrase("Partly cloudy")
                           .temperatureValue(18.5f)
                           .temperatureUnit("C")
+                          .link("https://example.com/hourly")
                           .build()))
               .build();
 

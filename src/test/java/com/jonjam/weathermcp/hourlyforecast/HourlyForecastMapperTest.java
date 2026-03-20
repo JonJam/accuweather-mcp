@@ -3,7 +3,6 @@ package com.jonjam.weathermcp.hourlyforecast;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -44,8 +43,6 @@ class HourlyForecastMapperTest {
       final HourlyForecastSummaryDto summary = mapper.toHourlyForecastSummary(hourlyForecasts);
 
       // Assert
-      assertThat(
-          summary.getDetailLink(), is("https://www.accuweather.com/en/es/valencia/352579/hourly"));
       assertThat(summary.getHours(), hasSize(2));
 
       final HourlyForecastHourSummaryDto firstHour = summary.getHours().get(0);
@@ -53,17 +50,22 @@ class HourlyForecastMapperTest {
       assertThat(firstHour.getIconPhrase(), is("Intermittent clouds"));
       assertThat(firstHour.getTemperatureValue(), is(18.5f));
       assertThat(firstHour.getTemperatureUnit(), is("C"));
+      assertThat(
+          firstHour.getLink(), is("https://www.accuweather.com/en/es/valencia/352579/hourly"));
 
       final HourlyForecastHourSummaryDto secondHour = summary.getHours().get(1);
       assertThat(secondHour.getDateTime(), is("2026-03-19T15:00:00+00:00"));
       assertThat(secondHour.getIconPhrase(), is("Partly sunny"));
       assertThat(secondHour.getTemperatureValue(), is(19.2f));
       assertThat(secondHour.getTemperatureUnit(), is("C"));
+      assertThat(
+          secondHour.getLink(),
+          is("https://www.accuweather.com/en/es/valencia/352579/hourly?hour=15"));
     }
 
     @Test
-    @DisplayName("uses first hour link as detailLink when present")
-    void usesFirstHourLinkAsDetailLinkWhenPresent() {
+    @DisplayName("maps AccuWeather link onto each hour summary")
+    void mapsAccuWeatherLinkOntoEachHourSummary() {
       // Arrange
       final List<AccuWeatherHourlyForecastDto> hourlyForecasts =
           List.of(
@@ -79,12 +81,12 @@ class HourlyForecastMapperTest {
       final HourlyForecastSummaryDto summary = mapper.toHourlyForecastSummary(hourlyForecasts);
 
       // Assert
-      assertThat(summary.getDetailLink(), is("https://example.com/first"));
+      assertThat(summary.getHours().getFirst().getLink(), is("https://example.com/first"));
     }
 
     @Test
-    @DisplayName("returns null detailLink when list is empty")
-    void returnsNullDetailLinkWhenListIsEmpty() {
+    @DisplayName("returns empty hours when AccuWeather list is empty")
+    void returnsEmptyHoursWhenAccuWeatherListIsEmpty() {
       // Arrange
       final List<AccuWeatherHourlyForecastDto> hourlyForecasts = List.of();
 
@@ -92,7 +94,6 @@ class HourlyForecastMapperTest {
       final HourlyForecastSummaryDto summary = mapper.toHourlyForecastSummary(hourlyForecasts);
 
       // Assert
-      assertThat(summary.getDetailLink(), is(nullValue()));
       assertThat(summary.getHours(), hasSize(0));
     }
   }

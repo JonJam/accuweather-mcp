@@ -17,4 +17,6 @@ public class HourlyForecastHourToolResult {
   float temperatureValue;
 
   String temperatureUnit;
+
+  String link;
 }

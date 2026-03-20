@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
-import org.jspecify.annotations.Nullable;
 
 @Value
 @Builder
@@ -17,6 +16,4 @@ public class HourlyForecastToolResult {
   String countryLocalizedName;
 
   List<HourlyForecastHourToolResult> hours;
-
-  @Nullable String detailLink;
 }

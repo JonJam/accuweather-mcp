@@ -144,14 +144,13 @@ public class HourlyForecastProvider {
     for (final HourlyForecastHourToolResult hour : toolResult.getHours()) {
       text.append(
           String.format(
-              "%s: %.1f°%s, %s%n",
+              "%s: %.1f°%s, %s. More detail: %s.%n",
               hour.getDateTime(),
               hour.getTemperatureValue(),
               hour.getTemperatureUnit(),
-              hour.getIconPhrase()));
+              hour.getIconPhrase(),
+              hour.getLink()));
     }
-
-    text.append(String.format("More detail: %s", toolResult.getDetailLink()));
 
     return text.toString();
   }

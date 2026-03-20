@@ -55,10 +55,6 @@ class HourlyForecastGatewayIntegrationTest {
       // Assert
       final HourlyForecastSummaryDto summary = result.orElseThrow();
 
-      assertThat(
-          summary.getDetailLink(),
-          is(
-              "https://www.accuweather.com/en/es/valencia/352579/hourly-weather-forecast/352579?lang=en-us"));
       assertThat(summary.getHours(), hasSize(2));
 
       final HourlyForecastHourSummaryDto firstHour = summary.getHours().get(0);
@@ -66,6 +62,10 @@ class HourlyForecastGatewayIntegrationTest {
       assertThat(firstHour.getIconPhrase(), is("Intermittent clouds"));
       assertThat(firstHour.getTemperatureValue(), is(18.5f));
       assertThat(firstHour.getTemperatureUnit(), is("C"));
+      assertThat(
+          firstHour.getLink(),
+          is(
+              "https://www.accuweather.com/en/es/valencia/352579/hourly-weather-forecast/352579?lang=en-us"));
     }
   }
 }
