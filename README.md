@@ -19,6 +19,30 @@ logging:
 
 - Run with `SPRING_PROFILES_ACTIVE=local ./gradlew bootRun`
 
+## Build Docker image locally
+
+This project uses the [Jib Gradle plugin](https://github.com/GoogleContainerTools/jib) to build a Docker image.
+
+- Build and load the image into your local Docker daemon:
+
+```bash
+./gradlew jibDockerBuild
+```
+
+- Build with an explicit tag (for example, `local-dev`):
+
+```bash
+./gradlew jibDockerBuild -Djib.to.tags=local-dev
+```
+
+The default image name is `io.github.jonjam/accuweather-mcp` and it is tagged with the project version (for example, `local-snapshot`).
+
+The built image includes this OCI label:
+
+```Dockerfile
+LABEL io.modelcontextprotocol.server.name="io.github.jonjam/accuweather-mcp"
+```
+
 ## Testing
 **Note**: If you enable the Java debugger, it will produce output to standard out which will trigger errors in the stdio MCP protocol.
 
