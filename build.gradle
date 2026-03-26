@@ -114,7 +114,7 @@ jib {
 	}
 	container {
 		labels = [
-			'io.modelcontextprotocol.server.name': 'io.github.jonjam/accuweather-mcp'
+			'io.modelcontextprotocol.server.name': 'io.github.JonJam/accuweather-mcp'
 		]
 	}
 }
