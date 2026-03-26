@@ -86,6 +86,15 @@ npx @modelcontextprotocol/inspector docker run --rm -i --env "ACCUWEATHER_API_KE
 ## Patterns and practies
 More information about patterns and practises for this project can be found in AGENTS.md.
 
+### Git
+
+This project uses [semantic-release](https://semantic-release.gitbook.io/semantic-release) to automate versioning, changelog generation, and publishing. 
+
+**Important:** Commit messages that are intended to trigger a release must be prefixed according to the [Conventional Commits](https://semantic-release.gitbook.io/semantic-release#commit-message-format) standard. For example:
+
+- `feat: add new forecast endpoint`
+- `fix: correct hourly forecast time calculation`
+
 ### Spotless
 
 This project uses the Spotless Gradle plugin to enforce a consistent Java style.
