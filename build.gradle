@@ -18,6 +18,8 @@ java {
 	}
 }
 
+def appVersionForResources = System.getenv('APP_VERSION') ?: 'local-SNAPSHOT'
+
 repositories {
 	mavenCentral()
 }
@@ -114,5 +116,14 @@ jib {
 		labels = [
 			'io.modelcontextprotocol.server.name': 'io.github.jonjam/accuweather-mcp'
 		]
+	}
+}
+
+processResources {
+	// Bake the release tag into `application.yaml` so the published Docker image reports the correct MCP server version.
+	inputs.property('appVersion', appVersionForResources)
+	filteringCharset = 'UTF-8'
+	filesMatching('application.yaml') {
+		filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [appVersion: appVersionForResources])
 	}
 }

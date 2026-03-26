@@ -15,7 +15,7 @@ spring:
     mcp:
       server:
         name: accuweather-mcp
-        version: ${APP_VERSION:local-SNAPSHOT}
+        version: @appVersion@
         instructions: "This server provides weather information sourced from AccuWeather."
         type: SYNC
         stdio: true
