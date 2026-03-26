@@ -14,14 +14,14 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set APP_VERSION env (if provided)
         if: ${{ inputs.app-version != '' }}
         run: echo "APP_VERSION=${{ inputs.app-version }}" >> "$GITHUB_ENV"
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew jibDockerBuild
 
       - name: Archive built JAR
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: built-jar
           path: |
@@ -44,7 +44,7 @@ jobs:
 
       - name: Archive Checkstyle report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: checkstyle-report
           path: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Archive JUnit test results and reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: junit-test-results
           path: |
@@ -61,7 +61,7 @@ jobs:
 
       - name: Archive JaCoCo coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jacoco-coverage-report
           path: |
